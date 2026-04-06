@@ -3,10 +3,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
-public class FileCesar {
+public class  FileCesar {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        String entrada = "", linea = "", lineaCifrada = "";
+        String entrada = "", lineaCifrada = "";
         char[] lineaChar;
         int valor = -1;
 
@@ -18,22 +18,23 @@ public class FileCesar {
             File f1 = new File(entrada);
             if (!f1.exists()) throw new FileNotFoundException("::ERROR:: El archivo no existe.");
 
-            File f2 = new File(entrada.substring(0, entrada.lastIndexOf("\\")) + "cesar.txt");
-            System.out.println("*********** " + f2);
+            File f2 = new File(f1.getParent() , "cesar.txt");
 
             System.out.print("Introduce el valor con el que deseas codificar: ");
             valor = Integer.parseInt(sc.nextLine());
 
             try (Scanner f = new Scanner(f1); PrintWriter copy = new PrintWriter(f2)){
                 while(f.hasNextLine()){
-                    linea = f.nextLine();
-                    lineaChar = new char[linea.length()];
-                    for (int i = 0; i < linea.length(); i++){
+                    lineaChar = f.nextLine().toCharArray();
+                    for (int i = 0; i < lineaChar.length; i++){
                         lineaChar[i] += valor;
                     }
                     lineaCifrada = new String(lineaChar);
                     copy.println(lineaCifrada);
                 }
+                System.out.println("Archivo codificado correctamente.");
+            }catch (FileNotFoundException e){
+                System.out.println(e.getMessage());
             }
         } catch (FileNotFoundException e) {
             System.out.println(e.getMessage());

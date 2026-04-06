@@ -25,8 +25,6 @@ public class DosRutastxt {
                 while (f1.hasNextLine()){
                     f2.println(f1.nextLine());
                 }
-                f2.close();
-                f1.close();
             }catch (FileNotFoundException e) {
                 System.out.println(e.getMessage());
             }
