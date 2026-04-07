@@ -15,7 +15,7 @@ public class ContarPalabras {
             File f = new File(f1);
             if (!f.exists()) throw new FileNotFoundException("::ERROR:: El fichero no existe.");
 
-            System.out.println(Utiles.contarP(f));
+            System.out.println("\n" + Utiles.contarP(f));
         }catch (FileNotFoundException e){
             System.out.println(e.getMessage());
         }

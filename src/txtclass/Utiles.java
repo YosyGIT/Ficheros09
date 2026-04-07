@@ -1,9 +1,8 @@
 package txtclass;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
+
 public abstract class Utiles {
 
     public static boolean equalsFiles(File f1, File f2) throws FileNotFoundException {
@@ -22,16 +21,22 @@ public abstract class Utiles {
     }
 
     public static String contarP (File f) throws FileNotFoundException {
-        String texto = "", palabra, contador;
-        int cont = 0;
-        HashMap <String, Integer> palabraCont = new HashMap<>();
+        StringBuilder texto = new StringBuilder();
+        String palabra;
+        TreeMap<String, Integer> palabraCont = new TreeMap<>(new ComparatorPalabra());
 
         try (Scanner file = new Scanner(f)){
 
             while(file.hasNext()){
                 palabra = file.next().toLowerCase();
-                if (!palabra.isEmpty() && palabraCont.containsKey(palabra)) cont++;
-                palabraCont.put(palabra, cont);
+                palabra = palabra.replaceAll("[\\p{P}\\p{S}]", " ").trim();
+                if (!palabra.isEmpty()){
+                    if (palabraCont.containsKey(palabra)){
+                        palabraCont.put(palabra, palabraCont.get(palabra) + 1);
+                    }else {
+                        palabraCont.put(palabra, 1);
+                    }
+                }
             }
         }catch (FileNotFoundException e){
             throw new FileNotFoundException("::ERROR:: Ocurrio un error al intentar contar las palabras, tipo de error: \n" +
@@ -39,11 +44,42 @@ public abstract class Utiles {
         }
 
         for (Map.Entry<String, Integer> pal : palabraCont.entrySet()){
-            String s = String.valueOf(pal.getValue()) + " veces";
-            texto += pal.getKey() + "," + s + "\n";
+            texto.append(pal.getKey()).append(", ").append(pal.getValue()).append(" veces\n");
         }
 
-        if (texto.isEmpty()) return "El fichero esta vacío o ha ocurrido un error de otro tipo";
-        return texto;
+        return texto.length() != 0?"-:Contador de palabras:-\n\n" + texto.toString():"El fichero esta vacío o contiene caracteres no validos.";
+    }
+
+    public static String contarN (File f) throws FileNotFoundException {
+        StringBuilder texto = new StringBuilder();
+        String palabra;
+        TreeMap<String, Integer> palabraCont = new TreeMap<>(new ComparatorPalabra());
+        ListaPalabras listaPalabras = new ListaPalabras();
+
+        try (Scanner file = new Scanner(f)){
+
+            while(file.hasNext()){
+                palabra = file.next().toLowerCase();
+                palabra = palabra.replaceAll("[\\p{P}\\p{S}]", " ").trim();
+                if (!palabra.isEmpty()){
+                    if (palabraCont.containsKey(palabra)){
+                        palabraCont.put(palabra, palabraCont.get(palabra) + 1);
+                    }else {
+                        palabraCont.put(palabra, 1);
+                    }
+                }
+            }
+
+            listaPalabras.crearLista(palabraCont);
+        }catch (FileNotFoundException e){
+            throw new FileNotFoundException("::ERROR:: Ocurrio un error al intentar contar las palabras, tipo de error: \n" +
+                    e.getMessage());
+        }
+
+        for (Palabra p : listaPalabras.getLista()){
+            texto.append(p.getPalabra()).append(", ").append(p.getVeces()).append(" veces\n");
+        }
+
+        return texto.length() != 0?"-:Contador de palabras:-\n\n" + texto.toString():"El fichero esta vacío o contiene caracteres no validos.";
     }
 }

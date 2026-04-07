@@ -1,38 +1,19 @@
 package txtclass;
 
-import java.io.FileNotFoundException;
-import java.util.Objects;
-
 public class Palabra {
-    private String p;
-    private int cont;
+    private String palabra;
+    private int veces;
 
-    public Palabra(String palabra) {
-        if (!palabra.isEmpty()){
-            this.p = palabra;
-        }
+    public Palabra(String palabra, Integer value) {
+        this.palabra = palabra;
+        this.veces = value;
     }
 
-    public int getCont() {
-        return cont;
+    public int getVeces() {
+        return veces;
     }
 
-    public void setCont(int cont) {
-        this.cont = cont;
-    }
-
-    public String getP() {
-        return p;
-    }
-
-    public void setP(String p) {
-        this.p = p;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Palabra palabra)) return false;
-        return Objects.equals(p, palabra.p);
+    public String getPalabra() {
+        return palabra;
     }
 }
-
