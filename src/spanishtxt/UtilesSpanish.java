@@ -6,6 +6,7 @@ import txtclass.Palabra;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -90,24 +91,20 @@ public abstract class UtilesSpanish {
         return texto.length() != 0?"-:Contador de palabras:-\n\n" + texto.toString():"El fichero esta vacío o contiene caracteres no validos.";
     }
 
-    public static void generadorLista(File f) throws FileNotFoundException {
+    public static StringBuilder mostrarDefinicion(ArrayList<PalabraDic> lista, String palabra){
         StringBuilder texto = new StringBuilder();
-        ListaPalabrasDic listaDic = new ListaPalabrasDic();
-        String linea, palabra, definicion;
-        String[] separador;
+        int cont = 1;
 
-        try (Scanner file = new Scanner(f)){
-            while (file.hasNextLine()){
-                linea = file.nextLine();
-                separador = linea.split("\t",2);
-                palabra = separador[0].trim();
-                definicion = separador[1].trim();
-                if (!palabra.isEmpty() && !definicion.isEmpty()){
-                    listaDic.addPalabra(new PalabraDic(palabra, definicion));
-                }
+        for (PalabraDic p : lista){
+            if (palabra.charAt(0) > p.getPalabra().charAt(0)){
+                return texto.isEmpty()?texto.append("No se encontro definiciones con esa palabra"):texto;
             }
-        } catch (FileNotFoundException e) {
-            throw new FileNotFoundException("::ERROR:: Ha ocurrido un error al crear la lista de palabras.");
+            if (palabra.equals(p.getPalabra())){
+                texto.append(cont).append(". ").append(p.getDefinicion()).append("\n");
+                cont++;
+            }
         }
+
+        return texto;
     }
 }
