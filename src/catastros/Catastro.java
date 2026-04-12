@@ -1,6 +1,8 @@
 package catastros;
 
-public class Catastro implements Comparable<Catastro>{
+import java.io.Serializable;
+
+public class Catastro implements Comparable<Catastro>, Serializable {
     private String nombre;
     private String direccion;
     private String nombreRegex = "[A-Za-zÑñ]{1,20}";
@@ -23,6 +25,15 @@ public class Catastro implements Comparable<Catastro>{
         this.direccion = direccion;
         this.metros = metros;
         this.borrado = false;
+    }
+
+    public Catastro (String nombre, String direccion, double metros, int opc) throws CatastroFormatException{
+        if (opc == 1){
+            this.nombre = nombre;
+            this.direccion = direccion;
+            this.metros = metros;
+            this.borrado = false;
+        }
     }
 
     public Catastro(int nCat){
@@ -57,6 +68,14 @@ public class Catastro implements Comparable<Catastro>{
         this.nCat = nCat;
     }
 
+    public double getMetros() {
+        return metros;
+    }
+
+    public void setMetros(double metros) {
+        this.metros = metros;
+    }
+
     public boolean isBorrado(){
         return borrado;
     }
@@ -69,10 +88,16 @@ public class Catastro implements Comparable<Catastro>{
         this.borrado = false;
     }
 
+    public void modificarCatastro(String nombre, String direccion, double metros){
+        if (!nombre.isEmpty()) setNombre(nombre);
+        if (!direccion.isEmpty()) setDireccion(direccion);
+        if (metros > 0) setMetros(metros);
+    }
+
     @Override
     public String toString(){
         return "NÚMERO DE CATASTRO [" + this.nCat + "], NOMBRE [" + this.nombre + "], DIRECCIÓN [" + this.direccion +
-        "], METROS CUADRADOS [" + this.direccion + "]";
+        "], METROS CUADRADOS [" + this.metros + "]";
     }
 
     @Override
